@@ -41,7 +41,7 @@ namespace ExchangeAnalyticsService.Controllers
         [HttpGet]
         public string Hello()
         {
-            return "Дратути";
+            return "Дратути :)";
         }
 
         [HttpGet]
