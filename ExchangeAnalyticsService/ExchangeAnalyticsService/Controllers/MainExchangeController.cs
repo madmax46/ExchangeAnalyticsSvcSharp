@@ -38,7 +38,6 @@ namespace ExchangeAnalyticsService.Controllers
             return false;
         }
 
-        [ApiVersion("1.0")]
         [HttpGet]
         public string Hello()
         {
