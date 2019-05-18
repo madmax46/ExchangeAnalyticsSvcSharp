@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExchangeAnalyticsService.IRepositories;
 using ExchangeAnalyticsService.Repositories;
+using ExchangeAnalyticsService.Services;
+using ExchangeAnalyticsService.Services.Interfaces;
 using ExchangeAnalyticsService.Utils;
 using ExchCommonLib;
 using Microsoft.AspNetCore.Builder;
@@ -29,14 +31,17 @@ namespace ExchangeAnalyticsService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddSingleton<IDBProvider>(DbUtils.MariaDbWrapper);
             services.AddSingleton<IInstrumentsRepository, InstrumentsRepository>();
-            services.AddSingleton<ITestReturnRepository, TestReturnRepository>();
+            services.AddSingleton<IInstrumentsService, InstrumentsService>();
             services.AddSingleton<IRatesRepository, RatesRepository>();
+            services.AddSingleton<IRatesService, RatesService>();
+            services.AddSingleton<IParsersService, ParsersService>();
+            services.AddSingleton<IParsersRepository, ParsersRepository>();
 
 
             services.AddMemoryCache();
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddApiVersioning();
@@ -58,13 +63,6 @@ namespace ExchangeAnalyticsService
                         Url = ""
                     }
                 });
-                c.SwaggerDoc("2.0", new Info
-                {
-                    Title = "My API",
-                    Version = "2.0"
-                });
-
-
             });
 
         }
@@ -85,7 +83,7 @@ namespace ExchangeAnalyticsService
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/1.0/swagger.json", "1.0");
-                c.SwaggerEndpoint("/swagger/2.0/swagger.json", "2.0");
+                //c.SwaggerEndpoint("/swagger/2.0/swagger.json", "2.0");
                 c.RoutePrefix = string.Empty;
             });
 

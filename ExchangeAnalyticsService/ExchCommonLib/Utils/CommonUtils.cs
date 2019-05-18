@@ -20,16 +20,5 @@ namespace ExchCommonLib.Utils
             return parsers;
         }
 
-        public static void RegisterNewParser(IDBProvider dbProvider, ParserInfo parserSettingsDb)
-        {
-            var dtId = dbProvider.ProcedureByName("registerNewParser",
-                            dbProvider.ToSqlParam(parserSettingsDb.IdInstrument),
-                            dbProvider.ToSqlParam(parserSettingsDb.ParsingPerodInDays),
-                            dbProvider.ToSqlParam(parserSettingsDb.StartParseDate),
-                            dbProvider.ToSqlParam(parserSettingsDb.ParseStatus));
-
-            int id = Convert.ToInt32(dtId.Rows[0][0]);
-            parserSettingsDb.Id = id;
-        }
     }
 }

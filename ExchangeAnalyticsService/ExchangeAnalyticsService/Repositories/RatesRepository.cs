@@ -14,7 +14,6 @@ namespace ExchangeAnalyticsService.Repositories
     {
         public IDBProvider dbProvider { get; }
 
-        uint maxDiffDays = 30;
 
         public RatesRepository(IDBProvider dbProvider)
         {
@@ -24,23 +23,9 @@ namespace ExchangeAnalyticsService.Repositories
 
         public List<Rate> GetRatesFromDb(uint instrumentId, DateTime dateStart, DateTime dateEnd)
         {
-            if (instrumentId == 0)
-                return new List<Rate>();
-            if (dateStart == dateEnd && dateStart == default(DateTime))
-                return new List<Rate>();
-
             try
             {
-                if (dateStart > dateEnd)
-                    dateEnd = dateStart;
-
-                var diffDays = dateEnd.Subtract(dateStart).TotalDays;
-
-                if (diffDays > maxDiffDays)
-                    dateStart = dateEnd.AddDays(-maxDiffDays);
-
                 var table = GetRatesTableFromDb(instrumentId, dateStart, dateEnd);
-
                 var rates = ParseRatesFromTable(table);
 
                 return rates;

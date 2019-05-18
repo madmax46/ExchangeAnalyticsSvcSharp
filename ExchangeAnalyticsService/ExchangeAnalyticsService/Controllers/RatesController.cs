@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeAnalyticsService.IRepositories;
-using ExchangeAnalyticsService.Models;
+using ExchangeAnalyticsService.Services.Interfaces;
 using ExchCommonLib.Classes;
 using ExchCommonLib.Classes.Exchange;
 using ExchCommonLib.Classes.Requests;
@@ -18,19 +18,25 @@ namespace ExchangeAnalyticsService.Controllers
     [ApiController]
     public class RatesController : ControllerBase
     {
-        private IRatesRepository RatesRepository { get; set; }
+        private IRatesService RatesService { get; set; }
 
-        public RatesController(IRatesRepository ratesRepository)
+        public RatesController(IRatesService ratesService)
         {
-            RatesRepository = ratesRepository;
+            RatesService = ratesService;
         }
-
 
 
         [HttpGet]
         public ActionResult<List<Rate>> GetRates(uint instrumentId, DateTime dateStart, DateTime dateEnd)
         {
-            return new ActionResult<List<Rate>>(RatesRepository.GetRatesFromDb(instrumentId, dateStart, dateEnd));
+            try
+            {
+                return new ActionResult<List<Rate>>(RatesService.GetRatesFromDb(instrumentId, dateStart, dateEnd));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
     }
 }

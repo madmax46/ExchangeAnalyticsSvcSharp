@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeAnalyticsService.IRepositories;
-using ExchangeAnalyticsService.Models;
+using ExchangeAnalyticsService.Services.Interfaces;
 using ExchCommonLib.Classes;
 using ExchCommonLib.Classes.Exchange;
 using ExchCommonLib.Classes.Requests;
@@ -20,23 +20,19 @@ namespace ExchangeAnalyticsService.Controllers
     [ApiController]
     public class InstrumentsController : ControllerBase
     {
-        private IInstrumentsRepository InstrumentsRepository { get; set; }
+        private IInstrumentsService InstrumentsService { get; set; }
 
-        public InstrumentsController(IInstrumentsRepository instrumentsRepository)
+        public InstrumentsController(IInstrumentsService instrumentsService)
         {
-            InstrumentsRepository = instrumentsRepository;
+            InstrumentsService = instrumentsService;
         }
 
 
         [HttpGet]
         public ActionResult<ExchangeMarkets> GetMarkets()
         {
-            return new ActionResult<ExchangeMarkets>(InstrumentsRepository.GetMarketsFromDb());
+            return new ActionResult<ExchangeMarkets>(InstrumentsService.GetMarketsFromDb());
         }
-
-
-
-
 
 
     }
