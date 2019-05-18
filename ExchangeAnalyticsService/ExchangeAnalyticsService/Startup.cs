@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExchangeAnalyticsService.IRepositories;
 using ExchangeAnalyticsService.Repositories;
+using ExchangeAnalyticsService.Utils;
+using ExchCommonLib;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -27,19 +29,26 @@ namespace ExchangeAnalyticsService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddSingleton<IDBProvider>(DbUtils.MariaDbWrapper);
+            services.AddSingleton<IInstrumentsRepository, InstrumentsRepository>();
+            services.AddSingleton<ITestReturnRepository, TestReturnRepository>();
+            services.AddSingleton<IRatesRepository, RatesRepository>();
+
+
+            services.AddMemoryCache();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddApiVersioning();
-            services.AddSingleton<ITestReturnRepository, TestReturnRepository>();
-
             services.AddMvcCore().AddApiExplorer();
 
             services.AddSwaggerGen(c =>
             {
-                //c.SwaggerDoc("1.0", new Info { Title = "My API", Version = "1.0" });
+                //c.SwaggerDoc("1.0", new Info { Title = "My API", Version = "1.0" 
                 c.SwaggerDoc("1.0", new Info
                 {
                     Version = "1.0",
-                    Title = "ToDo API",
+                    Title = "My API",
                     Description = "A simple example ASP.NET Core Web API",
                     TermsOfService = "None",
                     Contact = new Contact
@@ -49,6 +58,13 @@ namespace ExchangeAnalyticsService
                         Url = ""
                     }
                 });
+                c.SwaggerDoc("2.0", new Info
+                {
+                    Title = "My API",
+                    Version = "2.0"
+                });
+
+
             });
 
         }
@@ -68,9 +84,9 @@ namespace ExchangeAnalyticsService
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/1.0/swagger.json", "ToDo API");
+                c.SwaggerEndpoint("/swagger/1.0/swagger.json", "1.0");
+                c.SwaggerEndpoint("/swagger/2.0/swagger.json", "2.0");
                 c.RoutePrefix = string.Empty;
-                //c.SwaggerEndpoint("/swagger/1.0/swagger.json", "My API V1");
             });
 
             app.UseMvc();

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ExchangeAnalyticsService.IRepositories;
 using ExchangeAnalyticsService.Models;
 using ExchCommonLib.Classes;
+using ExchCommonLib.Classes.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 namespace ExchangeAnalyticsService.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     //[Route("api/{version:apiVersion}/[controller]/[action]")]
     [Route("api/v{version:apiVersion}/exchange/[action]")]
     [ApiController]
@@ -49,6 +51,16 @@ namespace ExchangeAnalyticsService.Controllers
         {
             return new ActionResult<IEnumerable<TestReturnData>>(TestRepository.GetAll());
         }
+
+
+        //[HttpGet]
+        [HttpPost]
+        public ActionResult<IEnumerable<Rate>> GetPeriodQuotesByInstrument([FromBody] InstrumentPricesRequest request)
+        {
+            return new ActionResult<IEnumerable<Rate>>(TestRepository.GetPeriodQuotesByInstrument(request));
+        }
+
+
 
         //public ActionResult<bool> InsertNewTestData([FromBody] TestReturnData data)
         //{

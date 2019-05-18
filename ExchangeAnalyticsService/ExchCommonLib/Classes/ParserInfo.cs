@@ -1,4 +1,5 @@
-﻿using ExchCommonLib.Enums;
+﻿using ExchCommonLib.Classes.Exchange;
+using ExchCommonLib.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +20,7 @@ namespace ExchCommonLib.Classes
         public DateTime LastDtTryLoad { get; set; }
 
 
-        public MarketInstrument Instrument { get; set; }
+        public Instrument Instrument { get; set; }
 
 
 
@@ -28,7 +29,7 @@ namespace ExchCommonLib.Classes
             ParserInfo parserSettings = new ParserInfo();
             try
             {
-                parserSettings.Instrument = MarketInstrument.FromRow(row);
+                parserSettings.Instrument = Instrument.FromRow(row);
             }
             catch (Exception ex)
             {

@@ -59,7 +59,7 @@ namespace ExchangeAnalyticsService
         }
         public DataTable ProcedureByName(string procedure, params object[] par)
         {
-            string parPart = string.Join(",", par.Select(r => string.Format("{0}", Convert.ToString(r))).ToArray());
+            string parPart = string.Join(",", par.Select(r => ToMySqlParameters(r)).ToArray());
             string sql = string.Format("CALL {0}({1})", procedure, parPart);
             using (MySqlConnection connect = new MySqlConnection(ConnectionStr))
             {

@@ -3,6 +3,7 @@ using ExchangeAnalyticsService.Models;
 using ExchangeAnalyticsService.Utils;
 using ExchCommonLib;
 using ExchCommonLib.Classes;
+using ExchCommonLib.Classes.Requests;
 using ExchCommonLib.Utils;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,11 @@ namespace ExchangeAnalyticsService.Repositories
             var table = CommonDbCalls.GetAllParsersFromDB(DbUtils.MariaDbWrapper);
             var retVal = CommonUtils.GetParserInfosFromDt(table);
             return retVal;
+        }
+
+        public IEnumerable<Rate> GetPeriodQuotesByInstrument(InstrumentPricesRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         public TestReturnData Remove(string key)

@@ -1,5 +1,6 @@
 ﻿using ExchangeAnalyticsService.Models;
 using ExchCommonLib.Classes;
+using ExchCommonLib.Classes.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace ExchangeAnalyticsService.IRepositories
     {
         void Add(TestReturnData item);
         IEnumerable<TestReturnData> GetAll();
+        IEnumerable<Rate> GetPeriodQuotesByInstrument(InstrumentPricesRequest request);
 
         IEnumerable<ParserInfo> GetAllPrsers();
 

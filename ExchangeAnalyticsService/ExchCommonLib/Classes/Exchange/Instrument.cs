@@ -1,19 +1,28 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExchCommonLib.Classes
+
+namespace ExchCommonLib.Classes.Exchange
 {
-    public class MarketInstrument
+
+    public class Instrument
     {
+        [JsonProperty(PropertyName = "FEmID")]
         public int FinamEmitentIDInt { get; set; }
+        [JsonProperty(PropertyName = "FEmIDs")]
         public string FinamEmitentID { get; set; }
+        [JsonProperty(PropertyName = "FMID")]
         public string FinamMarketID { get; set; }
+        [JsonProperty(PropertyName = "C")]
         public string Code { get; set; }
+        [JsonProperty(PropertyName = "Name")]
         public string Name { get; set; }
+        [JsonProperty(PropertyName = "URL")]
         public string ParseURL { get; set; }
 
-        public MarketInstrument(string FinamMarketID, string FinamEmitentID, string Code, string Name, string ParseURL)
+        public Instrument(string FinamMarketID, string FinamEmitentID, string Code, string Name, string ParseURL)
         {
             this.FinamMarketID = FinamMarketID;
             this.FinamEmitentID = FinamEmitentID;
@@ -23,7 +32,7 @@ namespace ExchCommonLib.Classes
             this.ParseURL = ParseURL;
         }
 
-        public static MarketInstrument FromRow(System.Data.DataRow row)
+        public static Instrument FromRow(System.Data.DataRow row)
         {
             string finamInstrumentId = Convert.ToString(row["idInstrument"]);
             string finamMarketId = Convert.ToString(row["idMarket"]);
@@ -31,7 +40,7 @@ namespace ExchCommonLib.Classes
             string code = Convert.ToString(row["code"]);
             string parseURL = Convert.ToString(row["parseURL"]);
 
-            MarketInstrument nmi = new MarketInstrument(finamMarketId, finamInstrumentId, code, name, parseURL);
+            Instrument nmi = new Instrument(finamMarketId, finamInstrumentId, code, name, parseURL);
 
             return nmi;
         }
