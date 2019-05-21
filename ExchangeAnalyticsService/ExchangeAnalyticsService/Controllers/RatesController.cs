@@ -10,6 +10,7 @@ using ExchCommonLib.Classes.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExchangeAnalyticsService.Controllers
 {
@@ -25,7 +26,7 @@ namespace ExchangeAnalyticsService.Controllers
             RatesService = ratesService;
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public ActionResult<List<Rate>> GetRates(uint instrumentId, DateTime dateStart, DateTime dateEnd)
         {

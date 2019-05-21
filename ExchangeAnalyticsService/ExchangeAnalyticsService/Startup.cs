@@ -15,7 +15,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Diagnostics;
+using Newtonsoft.Json;
 
 namespace ExchangeAnalyticsService
 {
@@ -38,15 +44,45 @@ namespace ExchangeAnalyticsService
             services.AddSingleton<IRatesService, RatesService>();
             services.AddSingleton<IParsersService, ParsersService>();
             services.AddSingleton<IParsersRepository, ParsersRepository>();
+            services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<IAccountRepository, AccountRepository>();
 
+            AddAdditionalServices(services);
 
-            services.AddMemoryCache();
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options => //CookieAuthenticationOptions
+            //    {
+            //        //options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/unauthorized");
+
+            //        options.LoginPath = new PathString("/Account/Login");
+            //        options.LogoutPath = new PathString("/Account/Logout");
+
+            //        options.Events.OnRedirectToLogin = context =>
+            //        {
+            //            if (context.Request.Path.StartsWithSegments("/api")
+            //                && context.Response.StatusCode == StatusCodes.Status200OK)
+            //            {
+            //                context.Response.Clear();
+            //                context.Response.Redirect("/unauthorized");
+            //                return Task.CompletedTask;
+            //            }
+            //            context.Response.Redirect(context.RedirectUri);
+            //            return Task.CompletedTask;
+            //        };
+            //    });
+
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddApiVersioning();
             services.AddMvcCore().AddApiExplorer();
 
+            AddSwaggerGen(services);
+
+        }
+
+        private static void AddSwaggerGen(IServiceCollection services)
+        {
             services.AddSwaggerGen(c =>
             {
                 //c.SwaggerDoc("1.0", new Info { Title = "My API", Version = "1.0" 
@@ -64,6 +100,46 @@ namespace ExchangeAnalyticsService
                     }
                 });
             });
+        }
+
+        private static void AddAdditionalServices(IServiceCollection services)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            // укзывает, будет ли валидироваться издатель при валидации токена
+                            ValidateIssuer = true,
+                            // строка, представляющая издателя
+                            ValidIssuer = AuthOptions.ISSUER,
+
+                            // будет ли валидироваться потребитель токена
+                            ValidateAudience = true,
+                            // установка потребителя токена
+                            ValidAudience = AuthOptions.AUDIENCE,
+                            // будет ли валидироваться время существования
+                            ValidateLifetime = true,
+
+                            // установка ключа безопасности
+                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            // валидация ключа безопасности
+                            ValidateIssuerSigningKey = true,
+                        };
+
+                        options.Events = new JwtBearerEvents()
+                        {
+                            OnChallenge = context =>
+                            {
+                                context.HandleResponse();
+                                context.Response.Redirect("/unauthorized");
+                                return Task.CompletedTask;
+                            }
+                        };
+                    });
+
+            services.AddMemoryCache();
 
         }
 
@@ -74,7 +150,16 @@ namespace ExchangeAnalyticsService
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
+
+            app.UseHttpsRedirection();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseAuthentication();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
