@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExchangeAnalyticsService.Services.Interfaces;
 using ExchCommonLib.Classes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeAnalyticsService.Controllers
 {
-
+    [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/exchange/[action]")]
     [ApiController]
@@ -23,14 +24,14 @@ namespace ExchangeAnalyticsService.Controllers
         }
 
 
-
+        [Authorize(Roles = "admin, user")]
         [HttpPost]
         public ActionResult<bool> RegisterNewParser([FromBody] ParserInfo parserInfo)
         {
             return ParsersService.RegisterNewParser(parserInfo);
         }
 
-
+        [Authorize(Roles = "admin, user, readonly")]
         [HttpGet]
         public ActionResult<List<ParserInfo>> GetParsers()
         {

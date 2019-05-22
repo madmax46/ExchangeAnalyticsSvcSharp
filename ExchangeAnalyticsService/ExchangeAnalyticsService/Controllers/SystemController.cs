@@ -22,5 +22,11 @@ namespace ExchangeAnalyticsService.Controllers
         {
             return StatusCode(403, "{\"message\":\"Действие запрещено\"}");
         }
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            return StatusCode(200, "{\"message\":\"Hello\"}");
+        }
     }
 }

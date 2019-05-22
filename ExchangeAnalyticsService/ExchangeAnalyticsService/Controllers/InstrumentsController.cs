@@ -7,6 +7,7 @@ using ExchangeAnalyticsService.Services.Interfaces;
 using ExchCommonLib.Classes;
 using ExchCommonLib.Classes.Exchange;
 using ExchCommonLib.Classes.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 namespace ExchangeAnalyticsService.Controllers
 {
 
+    [Authorize(Roles = "admin, user, readonly")]
     [ApiVersion("1.0")]
     //[Route("api/{version:apiVersion}/[controller]/[action]")]
     [Route("api/v{version:apiVersion}/exchange/[action]")]
@@ -26,7 +28,6 @@ namespace ExchangeAnalyticsService.Controllers
         {
             InstrumentsService = instrumentsService;
         }
-
 
         [HttpGet]
         public ActionResult<ExchangeMarkets> GetMarkets()

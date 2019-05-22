@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ExchangeAnalyticsService.Controllers
 {
+
+    [Authorize(Roles = "admin, user, readonly")]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/exchange/[action]")]
     [ApiController]
@@ -26,7 +28,7 @@ namespace ExchangeAnalyticsService.Controllers
             RatesService = ratesService;
         }
 
-        [Authorize(Roles = "admin")]
+
         [HttpGet]
         public ActionResult<List<Rate>> GetRates(uint instrumentId, DateTime dateStart, DateTime dateEnd)
         {

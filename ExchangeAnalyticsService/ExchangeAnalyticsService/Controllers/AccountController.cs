@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using ExchangeAnalyticsService.Models;
 using ExchangeAnalyticsService.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExchangeAnalyticsService.Controllers
 {
@@ -24,7 +25,7 @@ namespace ExchangeAnalyticsService.Controllers
         }
 
 
-        [HttpPost("/login")]
+
         //public async Task Login([FromBody] LoginInfo loginInfo)
         //{
 
@@ -60,6 +61,7 @@ namespace ExchangeAnalyticsService.Controllers
         //    Response.ContentType = "application/json";
         //    await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         //}
+        [HttpPost("/login")]
         public async Task Login([FromBody] LoginInfo loginInfo)
         {
             try
@@ -120,6 +122,20 @@ namespace ExchangeAnalyticsService.Controllers
             //await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
 
+
+        [Authorize]
+        [Route("/getname")]
+        public IActionResult GetName()
+        {
+            try
+            {
+                return Ok($"Ваш логин: {User.Identity.Name}");
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
 
     }
 }

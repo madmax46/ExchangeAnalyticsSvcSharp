@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>c128c947-4608-4801-8ea4-0155753b989d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +21,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExchCommonLib\ExchCommonLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Properties\launchSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
