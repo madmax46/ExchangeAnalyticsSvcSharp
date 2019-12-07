@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeAnalyticsService", "ExchangeAnalyticsService\ExchangeAnalyticsService.csproj", "{340739D4-2D5E-47C3-A4EC-53C794E300AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeAnalyticsService", "ExchangeAnalyticsService\ExchangeAnalyticsService.csproj", "{340739D4-2D5E-47C3-A4EC-53C794E300AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchCommonLib", "ExchCommonLib\ExchCommonLib.csproj", "{BB2BC1AC-BAD9-44BC-9A87-0A35E6423CFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchCommonLib", "ExchCommonLib\ExchCommonLib.csproj", "{BB2BC1AC-BAD9-44BC-9A87-0A35E6423CFA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySqlWrapper", "..\..\CommonProjects\CommonProjects\MySqlWrapper\MySqlWrapper.csproj", "{7A14B83F-A9B0-4745-A880-3365BD1CB49E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbWrapperCore", "..\..\CommonProjects\CommonProjects\DbWrapperCore\DbWrapperCore.csproj", "{9219E370-8DBA-49F9-8263-9A30858F55AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{95AD5936-A044-45D0-B218-7585F3B65E62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +27,21 @@ Global
 		{BB2BC1AC-BAD9-44BC-9A87-0A35E6423CFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB2BC1AC-BAD9-44BC-9A87-0A35E6423CFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB2BC1AC-BAD9-44BC-9A87-0A35E6423CFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A14B83F-A9B0-4745-A880-3365BD1CB49E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A14B83F-A9B0-4745-A880-3365BD1CB49E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A14B83F-A9B0-4745-A880-3365BD1CB49E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A14B83F-A9B0-4745-A880-3365BD1CB49E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9219E370-8DBA-49F9-8263-9A30858F55AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9219E370-8DBA-49F9-8263-9A30858F55AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9219E370-8DBA-49F9-8263-9A30858F55AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9219E370-8DBA-49F9-8263-9A30858F55AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7A14B83F-A9B0-4745-A880-3365BD1CB49E} = {95AD5936-A044-45D0-B218-7585F3B65E62}
+		{9219E370-8DBA-49F9-8263-9A30858F55AB} = {95AD5936-A044-45D0-B218-7585F3B65E62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C189DC5-B72A-4C2C-99CC-8A05566294DF}

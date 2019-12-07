@@ -1,4 +1,5 @@
-﻿using ExchangeAnalyticsService.IRepositories;
+﻿using DbWrapperCore;
+using ExchangeAnalyticsService.IRepositories;
 using ExchCommonLib;
 using ExchCommonLib.Classes;
 using System;

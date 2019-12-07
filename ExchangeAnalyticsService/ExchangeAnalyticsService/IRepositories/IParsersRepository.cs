@@ -1,4 +1,5 @@
-﻿using ExchCommonLib;
+﻿using DbWrapperCore;
+using ExchCommonLib;
 using ExchCommonLib.Classes;
 using System;
 using System.Collections.Generic;

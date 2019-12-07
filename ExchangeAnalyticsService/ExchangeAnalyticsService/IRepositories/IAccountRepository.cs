@@ -1,4 +1,5 @@
-﻿using ExchangeAnalyticsService.Models;
+﻿using DbWrapperCore;
+using ExchangeAnalyticsService.Models;
 using ExchCommonLib;
 using System;
 using System.Collections.Generic;

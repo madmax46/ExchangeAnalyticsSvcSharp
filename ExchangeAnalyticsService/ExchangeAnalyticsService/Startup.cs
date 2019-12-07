@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
+using DbWrapperCore;
 
 namespace ExchangeAnalyticsService
 {
