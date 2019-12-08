@@ -17,6 +17,8 @@ namespace ExchangeAnalyticsService.Controllers
     {
 
         [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IActionResult), 200)]
         public IActionResult GetPredictionFor([FromBody] PredictionRequest predictionsRequest)
         {
 

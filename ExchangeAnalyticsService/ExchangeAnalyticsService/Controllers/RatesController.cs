@@ -30,6 +30,8 @@ namespace ExchangeAnalyticsService.Controllers
 
 
         [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(ActionResult<List<ParserInfo>>), 200)]
         public ActionResult<List<Rate>> GetRates(uint instrumentId, DateTime dateStart, DateTime dateEnd)
         {
             try

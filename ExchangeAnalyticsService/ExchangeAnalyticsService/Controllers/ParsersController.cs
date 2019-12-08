@@ -26,6 +26,8 @@ namespace ExchangeAnalyticsService.Controllers
 
         [Authorize(Roles = "admin, user")]
         [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(ActionResult<bool>), 200)]
         public ActionResult<bool> RegisterNewParser([FromBody] ParserInfo parserInfo)
         {
             return ParsersService.RegisterNewParser(parserInfo);
@@ -33,6 +35,8 @@ namespace ExchangeAnalyticsService.Controllers
 
         [Authorize(Roles = "admin, user, readonly")]
         [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(ActionResult<List<ParserInfo>>), 200)]
         public ActionResult<List<ParserInfo>> GetParsers()
         {
             return ParsersService.GetParsers();

@@ -23,6 +23,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
 using DbWrapperCore;
+using AnalyticsService.Auth;
+using ExchangeAnalyticsService.Auth;
+using System.IO;
+using ExchangeAnalyticsService.Classes;
 
 namespace ExchangeAnalyticsService
 {
@@ -38,6 +42,13 @@ namespace ExchangeAnalyticsService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(LogLevel.Trace);
+            });
+
             services.AddSingleton<IDBProvider>(DbUtils.MariaDbWrapper);
             services.AddSingleton<IInstrumentsRepository, InstrumentsRepository>();
             services.AddSingleton<IInstrumentsService, InstrumentsService>();
@@ -48,29 +59,19 @@ namespace ExchangeAnalyticsService
             services.AddSingleton<IAccountService, AccountService>();
             services.AddSingleton<IAccountRepository, AccountRepository>();
 
+
+            services.AddSingleton<IConfigurationRoot>(serviceProvider =>
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                var config = builder.Build();
+                return config;
+            });
+
+
+            AddAuthenticationServices(services);
             AddAdditionalServices(services);
-
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(options => //CookieAuthenticationOptions
-            //    {
-            //        //options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/unauthorized");
-
-            //        options.LoginPath = new PathString("/Account/Login");
-            //        options.LogoutPath = new PathString("/Account/Logout");
-
-            //        options.Events.OnRedirectToLogin = context =>
-            //        {
-            //            if (context.Request.Path.StartsWithSegments("/api")
-            //                && context.Response.StatusCode == StatusCodes.Status200OK)
-            //            {
-            //                context.Response.Clear();
-            //                context.Response.Redirect("/unauthorized");
-            //                return Task.CompletedTask;
-            //            }
-            //            context.Response.Redirect(context.RedirectUri);
-            //            return Task.CompletedTask;
-            //        };
-            //    });
 
 
 
@@ -86,12 +87,10 @@ namespace ExchangeAnalyticsService
         {
             services.AddSwaggerGen(c =>
             {
-                //c.SwaggerDoc("1.0", new Info { Title = "My API", Version = "1.0" 
-                c.SwaggerDoc("1.0", new Info
+                c.SwaggerDoc("v1", new Info
                 {
-                    Version = "1.0",
-                    Title = "My API",
-                    Description = "A simple example ASP.NET Core Web API",
+                    Title = "AnalyticsService API",
+                    Version = "v1",
                     TermsOfService = "None",
                     Contact = new Contact
                     {
@@ -100,48 +99,38 @@ namespace ExchangeAnalyticsService
                         Url = ""
                     }
                 });
+                c.AddSecurityDefinition("Bearer",
+                    new ApiKeyScheme
+                    {
+                        In = "header",
+                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                        Name = "Authorization",
+                        Type = "apiKey"
+                    });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                    { "Bearer", Enumerable.Empty<string>() },
+                });
             });
         }
 
+
         private static void AddAdditionalServices(IServiceCollection services)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            // укзывает, будет ли валидироваться издатель при валидации токена
-                            ValidateIssuer = true,
-                            // строка, представляющая издателя
-                            ValidIssuer = AuthOptions.ISSUER,
 
-                            // будет ли валидироваться потребитель токена
-                            ValidateAudience = true,
-                            // установка потребителя токена
-                            ValidAudience = AuthOptions.AUDIENCE,
-                            // будет ли валидироваться время существования
-                            ValidateLifetime = true,
+        }
 
-                            // установка ключа безопасности
-                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                            // валидация ключа безопасности
-                            ValidateIssuerSigningKey = true,
-                        };
+        private static void AddAuthenticationServices(IServiceCollection services)
+        {
+            services.AddAuthentication("BearerRemote")
+                    .AddScheme<RemoteJWTAuthenticationOptions, RemoteJWTAuthenticationHandler>("BearerRemote", null);
 
-                        options.Events = new JwtBearerEvents()
-                        {
-                            OnChallenge = context =>
-                            {
-                                context.HandleResponse();
-                                context.Response.Redirect("/unauthorized");
-                                return Task.CompletedTask;
-                            }
-                        };
-                    });
+            services.AddSingleton<IRemoteJwtAuthenticationService>(serviceProvider =>
+            {
+                var config = serviceProvider.GetRequiredService<IConfigurationRoot>();
+                var serviceAuthenticationParams = config.GetSection("ServiceAuthentication")?.Get<ServiceAuthenticationParams>();
 
-            services.AddMemoryCache();
-
+                return new RemoteJwtAuthenticationService(serviceAuthenticationParams.TokenCheckServiceUrl);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -168,8 +157,7 @@ namespace ExchangeAnalyticsService
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/1.0/swagger.json", "1.0");
-                //c.SwaggerEndpoint("/swagger/2.0/swagger.json", "2.0");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AnalyticsService V1");
                 c.RoutePrefix = string.Empty;
             });
 

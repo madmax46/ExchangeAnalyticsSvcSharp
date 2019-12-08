@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbWrapperCore", "..\..\Comm
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{95AD5936-A044-45D0-B218-7585F3B65E62}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthCommonLib", "..\..\CommonProjects\CommonProjects\AuthCommonLib\AuthCommonLib.csproj", "{74CE0603-52A0-4332-814E-CEF8D5203CB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{9219E370-8DBA-49F9-8263-9A30858F55AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9219E370-8DBA-49F9-8263-9A30858F55AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9219E370-8DBA-49F9-8263-9A30858F55AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74CE0603-52A0-4332-814E-CEF8D5203CB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74CE0603-52A0-4332-814E-CEF8D5203CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74CE0603-52A0-4332-814E-CEF8D5203CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74CE0603-52A0-4332-814E-CEF8D5203CB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7A14B83F-A9B0-4745-A880-3365BD1CB49E} = {95AD5936-A044-45D0-B218-7585F3B65E62}
 		{9219E370-8DBA-49F9-8263-9A30858F55AB} = {95AD5936-A044-45D0-B218-7585F3B65E62}
+		{74CE0603-52A0-4332-814E-CEF8D5203CB5} = {95AD5936-A044-45D0-B218-7585F3B65E62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C189DC5-B72A-4C2C-99CC-8A05566294DF}

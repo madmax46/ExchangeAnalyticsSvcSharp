@@ -1,4 +1,5 @@
 ﻿using ExchangeAnalyticsService.IRepositories;
+using ExchangeAnalyticsService.Models;
 using ExchCommonLib;
 using ExchCommonLib.Classes.Exchange;
 using System;
@@ -10,8 +11,7 @@ namespace ExchangeAnalyticsService.Services.Interfaces
 {
     public interface IInstrumentsService
     {
-        IInstrumentsRepository InstrumentsRepository { get; }
-
         ExchangeMarkets GetMarketsFromDb();
+        InstrumentsResponse GetParsedInstruments();
     }
 }

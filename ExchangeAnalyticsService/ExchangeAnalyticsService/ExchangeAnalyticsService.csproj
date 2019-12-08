@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\CommonProjects\CommonProjects\DbWrapperCore\DbWrapperCore.csproj" />
+    <ProjectReference Include="..\..\..\CommonProjects\CommonProjects\AuthCommonLib\AuthCommonLib.csproj" />
     <ProjectReference Include="..\..\..\CommonProjects\CommonProjects\MySqlWrapper\MySqlWrapper.csproj" />
     <ProjectReference Include="..\ExchCommonLib\ExchCommonLib.csproj" />
   </ItemGroup>
