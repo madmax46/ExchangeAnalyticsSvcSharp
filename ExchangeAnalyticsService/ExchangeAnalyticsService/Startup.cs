@@ -53,10 +53,10 @@ namespace ExchangeAnalyticsService
             services.AddSingleton<IInstrumentsRepository, InstrumentsRepository>();
             services.AddSingleton<IInstrumentsService, InstrumentsService>();
             services.AddSingleton<IRatesRepository, RatesRepository>();
-            services.AddSingleton<IRatesService, RatesService>();
+            services.AddSingleton<ICandlesService, CandlesService>();
             services.AddSingleton<IParsersService, ParsersService>();
             services.AddSingleton<IParsersRepository, ParsersRepository>();
-            services.AddSingleton<IAccountService, AccountService>();
+            //services.AddSingleton<IAccountService, AccountService>();
             services.AddSingleton<IAccountRepository, AccountRepository>();
 
 

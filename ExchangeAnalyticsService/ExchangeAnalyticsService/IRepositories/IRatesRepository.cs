@@ -12,6 +12,6 @@ namespace ExchangeAnalyticsService.IRepositories
     {
         IDBProvider dbProvider { get; }
 
-        List<Rate> GetRatesFromDb(uint instrumentId, DateTime dateStart, DateTime dateEnd);
+        List<Candle> GetRatesFromDb(uint instrumentId, DateTime dateStart, DateTime dateEnd);
     }
 }

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ExchCommonLib.Enums;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
 namespace ExchCommonLib.Classes
 {
-    public class Rate
+    public class Candle
     {
         public DateTime Date { get; set; }
         public float Open { get; set; }
@@ -14,17 +15,18 @@ namespace ExchCommonLib.Classes
         public float Close { get; set; }
         public ulong Volume { get; set; }
 
-        public static Rate FromRow(DataRow oneRow)
+        public CandlesInterval Interval { get; set; }
+        public static Candle FromRow(DataRow oneRow)
         {
-            Rate rate = new Rate();
-            rate.Date = Convert.ToDateTime(oneRow["date"]);
-            rate.Open = Convert.ToSingle(oneRow["open"]);
-            rate.High = Convert.ToSingle(oneRow["high"]);
-            rate.Low = Convert.ToSingle(oneRow["low"]);
-            rate.Close = Convert.ToSingle(oneRow["close"]);
-            rate.Volume = Convert.ToUInt64(oneRow["volume"]);
-
-            return rate;
+            Candle candle = new Candle();
+            candle.Date = Convert.ToDateTime(oneRow["date"]);
+            candle.Open = Convert.ToSingle(oneRow["open"]);
+            candle.High = Convert.ToSingle(oneRow["high"]);
+            candle.Low = Convert.ToSingle(oneRow["low"]);
+            candle.Close = Convert.ToSingle(oneRow["close"]);
+            candle.Volume = Convert.ToUInt64(oneRow["volume"]);
+            candle.Interval = CandlesInterval.Min;
+            return candle;
         }
     }
 }

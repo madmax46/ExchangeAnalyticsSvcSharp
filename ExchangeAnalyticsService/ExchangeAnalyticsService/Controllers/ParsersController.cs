@@ -12,7 +12,7 @@ namespace ExchangeAnalyticsService.Controllers
 {
     [Authorize]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/exchange/[action]")]
+    [Route("api/v{version:apiVersion}/market/parsing/[action]")]
     [ApiController]
     public class ParsersController : ControllerBase
     {

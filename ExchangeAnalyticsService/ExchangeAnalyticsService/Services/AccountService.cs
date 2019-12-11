@@ -14,7 +14,7 @@ using ExchangeAnalyticsService.IRepositories;
 
 namespace ExchangeAnalyticsService.Services
 {
-    public class AccountService : IAccountService
+    public class AccountService 
     {
         IAccountRepository AccountRepository { get; }
 

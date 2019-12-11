@@ -22,7 +22,7 @@ namespace ExchangeAnalyticsService.Repositories
         }
 
 
-        public List<Rate> GetRatesFromDb(uint instrumentId, DateTime dateStart, DateTime dateEnd)
+        public List<Candle> GetRatesFromDb(uint instrumentId, DateTime dateStart, DateTime dateEnd)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace ExchangeAnalyticsService.Repositories
             }
             catch
             {
-                return new List<Rate>();
+                return new List<Candle>();
             }
         }
 
@@ -52,13 +52,13 @@ namespace ExchangeAnalyticsService.Repositories
             return table;
         }
 
-        private List<Rate> ParseRatesFromTable(DataTable ratesTable)
+        private List<Candle> ParseRatesFromTable(DataTable ratesTable)
         {
-            List<Rate> rates = new List<Rate>();
+            List<Candle> rates = new List<Candle>();
 
             foreach (DataRow oneRow in ratesTable.Rows)
             {
-                rates.Add(Rate.FromRow(oneRow));
+                rates.Add(Candle.FromRow(oneRow));
             }
 
             return rates;

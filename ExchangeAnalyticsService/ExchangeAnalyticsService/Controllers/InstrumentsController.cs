@@ -19,7 +19,7 @@ namespace ExchangeAnalyticsService.Controllers
     [Authorize(Roles = "admin, user, readonly")]
     [ApiVersion("1.0")]
     //[Route("api/{version:apiVersion}/[controller]/[action]")]
-    [Route("api/v{version:apiVersion}/exchange/[action]")]
+    [Route("api/v{version:apiVersion}/market/[action]")]
     [ApiController]
     public class InstrumentsController : ControllerBase
     {

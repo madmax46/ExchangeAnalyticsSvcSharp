@@ -11,7 +11,7 @@ namespace ExchangeAnalyticsService.Controllers
 {
     [Authorize(Roles = "admin, user")]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/exchange/[action]")]
+    [Route("api/v{version:apiVersion}/market/analytics/[action]")]
     [ApiController]
     public class AnalyticsController : ControllerBase
     {

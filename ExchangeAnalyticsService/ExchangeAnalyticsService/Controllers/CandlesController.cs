@@ -11,32 +11,33 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using ExchCommonLib.Classes.Responses;
 
 namespace ExchangeAnalyticsService.Controllers
 {
 
     [Authorize(Roles = "admin, user, readonly")]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/exchange/[action]")]
     [ApiController]
-    public class RatesController : ControllerBase
+    public class CandlesController : ControllerBase
     {
-        private IRatesService RatesService { get; set; }
+        private readonly ICandlesService ratesService;
 
-        public RatesController(IRatesService ratesService)
+        public CandlesController(ICandlesService ratesService)
         {
-            RatesService = ratesService;
+            this.ratesService = ratesService;
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ActionResult<List<ParserInfo>>), 200)]
-        public ActionResult<List<Rate>> GetRates(uint instrumentId, DateTime dateStart, DateTime dateEnd)
+        [Route("api/v{version:apiVersion}/market/candles")]
+        public ActionResult<CandlesResponse> GetRates([FromBody] CandlesRequest request)
         {
             try
             {
-                return new ActionResult<List<Rate>>(RatesService.GetRatesFromDb(instrumentId, dateStart, dateEnd));
+                return new ActionResult<CandlesResponse>(ratesService.GetCandles(request));
             }
             catch (Exception ex)
             {
