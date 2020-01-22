@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmaAnalyseWorker", "SmaAnalyseWorker\SmaAnalyseWorker.csproj", "{BDE0C43A-F739-42ED-99F5-5E43A7B56914}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{E919ADD1-BFAA-4092-9793-7C2D96C085BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbWrapperCore", "..\..\CommonProjects\CommonProjects\DbWrapperCore\DbWrapperCore.csproj", "{E4E2CAF7-D111-4268-918C-CC5DCAEA61AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySqlWrapper", "..\..\CommonProjects\CommonProjects\MySqlWrapper\MySqlWrapper.csproj", "{6F6F53E8-335D-49AB-B065-94873100914A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchCommonLib", "..\ExchangeAnalyticsService\ExchCommonLib\ExchCommonLib.csproj", "{488B04D2-8B4D-4D11-B7D3-FA009F7BAE71}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechAnalysisAlgLib", "..\..\CommonProjects\CommonProjects\TechAnalysisAlgLib\TechAnalysisAlgLib.csproj", "{D40E2ADA-5A79-4380-8F63-192E70FD6DDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDE0C43A-F739-42ED-99F5-5E43A7B56914}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE0C43A-F739-42ED-99F5-5E43A7B56914}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE0C43A-F739-42ED-99F5-5E43A7B56914}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE0C43A-F739-42ED-99F5-5E43A7B56914}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4E2CAF7-D111-4268-918C-CC5DCAEA61AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E2CAF7-D111-4268-918C-CC5DCAEA61AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E2CAF7-D111-4268-918C-CC5DCAEA61AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E2CAF7-D111-4268-918C-CC5DCAEA61AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F6F53E8-335D-49AB-B065-94873100914A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6F53E8-335D-49AB-B065-94873100914A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6F53E8-335D-49AB-B065-94873100914A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6F53E8-335D-49AB-B065-94873100914A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488B04D2-8B4D-4D11-B7D3-FA009F7BAE71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488B04D2-8B4D-4D11-B7D3-FA009F7BAE71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488B04D2-8B4D-4D11-B7D3-FA009F7BAE71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488B04D2-8B4D-4D11-B7D3-FA009F7BAE71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D40E2ADA-5A79-4380-8F63-192E70FD6DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D40E2ADA-5A79-4380-8F63-192E70FD6DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D40E2ADA-5A79-4380-8F63-192E70FD6DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D40E2ADA-5A79-4380-8F63-192E70FD6DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E4E2CAF7-D111-4268-918C-CC5DCAEA61AB} = {E919ADD1-BFAA-4092-9793-7C2D96C085BE}
+		{6F6F53E8-335D-49AB-B065-94873100914A} = {E919ADD1-BFAA-4092-9793-7C2D96C085BE}
+		{488B04D2-8B4D-4D11-B7D3-FA009F7BAE71} = {E919ADD1-BFAA-4092-9793-7C2D96C085BE}
+		{D40E2ADA-5A79-4380-8F63-192E70FD6DDC} = {E919ADD1-BFAA-4092-9793-7C2D96C085BE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E472700C-07C7-495D-8A44-BE6F1C223627}
+	EndGlobalSection
+EndGlobal
