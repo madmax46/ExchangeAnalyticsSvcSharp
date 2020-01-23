@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using AnalyticsService.Auth;
 using AuthCommonLib.Authorize;
 using ExchangeAnalyticsService.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;

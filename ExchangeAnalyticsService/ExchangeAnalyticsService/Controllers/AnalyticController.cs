@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeAnalyticsService.Models;
+using ExchangeAnalyticsService.Models.Responses;
+using ExchangeAnalyticsService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +17,20 @@ namespace ExchangeAnalyticsService.Controllers
     [ApiController]
     public class AnalyticsController : ControllerBase
     {
+        private readonly IAnalyticsService analyticsService;
+
+        public AnalyticsController(IAnalyticsService analyticsService)
+        {
+            this.analyticsService = analyticsService;
+        }
 
         [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IActionResult), 200)]
-        public IActionResult GetPredictionFor([FromBody] PredictionRequest predictionsRequest)
+        public ActionResult<PredictionResponse> GetPredictionFor([FromBody] PredictionRequest predictionsRequest)
         {
-
-            return StatusCode(200);
+            var res = analyticsService.GetPredictionFor(predictionsRequest);
+            return res;
         }
 
 

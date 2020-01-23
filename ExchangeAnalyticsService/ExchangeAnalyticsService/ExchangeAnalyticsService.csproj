@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\CommonProjects\CommonProjects\AuthCommonLib\AuthCommonLib.csproj" />
     <ProjectReference Include="..\..\..\CommonProjects\CommonProjects\MySqlWrapper\MySqlWrapper.csproj" />
+    <ProjectReference Include="..\..\..\CommonProjects\CommonProjects\TechAnalysisAlgLib\TechAnalysisAlgLib.csproj" />
     <ProjectReference Include="..\ExchCommonLib\ExchCommonLib.csproj" />
   </ItemGroup>
 

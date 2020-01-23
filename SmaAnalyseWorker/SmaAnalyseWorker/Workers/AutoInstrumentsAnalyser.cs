@@ -72,9 +72,11 @@ namespace SmaAnalyseWorker.Workers
             return parsersInfo;
         }
 
-        private void LoadTechMethodsFromDb()
-        {
+        //private List<>
 
-        }
+        //private void LoadTechMethodsFromDb()
+        //{
+
+        //}
     }
 }

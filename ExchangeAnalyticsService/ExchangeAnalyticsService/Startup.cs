@@ -23,9 +23,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
 using DbWrapperCore;
-using AnalyticsService.Auth;
 using ExchangeAnalyticsService.Auth;
 using System.IO;
+using ExchangeAnalyticsService.Analytic;
 using ExchangeAnalyticsService.Classes;
 
 namespace ExchangeAnalyticsService
@@ -53,9 +53,16 @@ namespace ExchangeAnalyticsService
             services.AddSingleton<IInstrumentsRepository, InstrumentsRepository>();
             services.AddSingleton<IInstrumentsService, InstrumentsService>();
             services.AddSingleton<IRatesRepository, RatesRepository>();
+            services.AddSingleton<IAnalyticsService, AnalyticsService>();
             services.AddSingleton<ICandlesService, CandlesService>();
             services.AddSingleton<IParsersService, ParsersService>();
             services.AddSingleton<IParsersRepository, ParsersRepository>();
+            services.AddSingleton<InstrumentsTechAnalyser, InstrumentsTechAnalyser>();
+            services.AddSingleton<ITechMethodsRepository>(r =>
+            {
+                var log = r.GetService<ILogger<TechMethodsRepository>>();
+                return new TechMethodsRepository(DbUtils.SmAnalyticsDb, log);
+            });
             //services.AddSingleton<IAccountService, AccountService>();
             services.AddSingleton<IAccountRepository, AccountRepository>();
 

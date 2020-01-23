@@ -9,8 +9,10 @@ namespace ExchangeAnalyticsService.Utils
     public static class DbUtils
     {
         private static object syncRoot = new object();
+        private static object syncRoot2 = new object();
 
         private static MySqlWrap mariaDbWrapper;
+        private static MySqlWrap smAnalyticsDbWrapper;
 
         public static MySqlWrap MariaDbWrapper
         {
@@ -38,6 +40,38 @@ namespace ExchangeAnalyticsService.Utils
                 }
 
                 return mariaDbWrapper;
+            }
+        }
+
+
+
+
+        public static MySqlWrap SmAnalyticsDb
+        {
+            get
+            {
+                if (smAnalyticsDbWrapper == null)
+                {
+                    lock (syncRoot2)
+                    {
+                        if (smAnalyticsDbWrapper == null)
+                        {
+                            MySqlConfig config = new MySqlConfig()
+                            {
+                                Host = "89.208.196.51",
+                                Port = 3306,
+                                UserId = "root",
+                                Password = "admin1234",
+                                SslMode = "none",
+                                Database = "smanalytics",
+                                CharacterSet = "utf8"
+                            };
+                            smAnalyticsDbWrapper = new MySqlWrap(config);
+                        }
+                    }
+                }
+
+                return smAnalyticsDbWrapper;
             }
         }
     }
