@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeAnalyticsService.Models;
-using ExchangeAnalyticsService.Models.Responses;
+using ExchCommonLib.Classes.Requests;
+using ExchCommonLib.Classes.Responses;
 
 namespace ExchangeAnalyticsService.Services.Interfaces
 {

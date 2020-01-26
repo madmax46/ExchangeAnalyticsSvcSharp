@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExchangeAnalyticsService.Analytic;
 using ExchangeAnalyticsService.Models;
-using ExchangeAnalyticsService.Models.Responses;
 using ExchangeAnalyticsService.Services.Interfaces;
+using ExchCommonLib.Classes.Requests;
+using ExchCommonLib.Classes.Responses;
 
 namespace ExchangeAnalyticsService.Services
 {
