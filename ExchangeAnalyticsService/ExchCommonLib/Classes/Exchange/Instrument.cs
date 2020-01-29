@@ -10,7 +10,7 @@ namespace ExchCommonLib.Classes.Exchange
     public class Instrument
     {
         [JsonProperty(PropertyName = "FEmID")]
-        public int FinamEmitentIDInt { get; set; }
+        public int FinamEmitentIDInt { get; set; } //Это idInstrument
         [JsonProperty(PropertyName = "FEmIDs")]
         public string FinamEmitentID { get; set; }
         [JsonProperty(PropertyName = "FMID")]

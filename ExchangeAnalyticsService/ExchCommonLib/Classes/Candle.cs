@@ -20,10 +20,10 @@ namespace ExchCommonLib.Classes
         {
             Candle candle = new Candle();
             candle.Date = Convert.ToDateTime(oneRow["date"]);
-            candle.Open = Convert.ToSingle(oneRow["open"]);
-            candle.High = Convert.ToSingle(oneRow["high"]);
-            candle.Low = Convert.ToSingle(oneRow["low"]);
-            candle.Close = Convert.ToSingle(oneRow["close"]);
+            candle.Open = Math.Round(Convert.ToDouble(oneRow["open"]), 2);
+            candle.High = Math.Round(Convert.ToDouble(oneRow["high"]), 2);
+            candle.Low = Math.Round(Convert.ToDouble(oneRow["low"]), 2);
+            candle.Close = Math.Round(Convert.ToDouble(oneRow["close"]), 2);
             candle.Volume = Convert.ToUInt64(oneRow["volume"]);
             candle.Interval = CandlesInterval.Min;
             return candle;

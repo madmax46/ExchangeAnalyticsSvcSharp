@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ExchangeAnalyticsService.Repositories
 {
@@ -35,6 +36,23 @@ namespace ExchangeAnalyticsService.Repositories
             {
                 return new List<Candle>();
             }
+        }
+
+        public DateTime? GetLastCandleDtForInstrumentFromDb(uint instrumentId)
+        {
+            try
+            {
+                var table = dbProvider.ProcedureByName("svc_getMaxCandleDtForInstrument", instrumentId);
+                if (!table.Rows.Any())
+                    return null;
+
+                return Convert.ToDateTime(table.Rows[0][0]);
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
 

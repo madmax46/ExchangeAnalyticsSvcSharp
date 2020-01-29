@@ -13,6 +13,7 @@ namespace ExchangeAnalyticsService.Utils
 
         private static MySqlWrap mariaDbWrapper;
         private static MySqlWrap smAnalyticsDbWrapper;
+        private static MySqlWrap userPortfolioDbWrapper;
 
         public static MySqlWrap MariaDbWrapper
         {
@@ -74,5 +75,35 @@ namespace ExchangeAnalyticsService.Utils
                 return smAnalyticsDbWrapper;
             }
         }
+
+        public static MySqlWrap UserPortfolioDb
+        {
+            get
+            {
+                if (userPortfolioDbWrapper == null)
+                {
+                    lock ("userPortfolioDbWrapper")
+                    {
+                        if (userPortfolioDbWrapper == null)
+                        {
+                            MySqlConfig config = new MySqlConfig()
+                            {
+                                Host = "89.208.196.51",
+                                Port = 3306,
+                                UserId = "root",
+                                Password = "admin1234",
+                                SslMode = "none",
+                                Database = "users_portfolio",
+                                CharacterSet = "utf8"
+                            };
+                            userPortfolioDbWrapper = new MySqlWrap(config);
+                        }
+                    }
+                }
+
+                return userPortfolioDbWrapper;
+            }
+        }
+
     }
 }

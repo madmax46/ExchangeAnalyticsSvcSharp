@@ -10,8 +10,8 @@ namespace ExchangeAnalyticsService.IRepositories
 {
     public interface IRatesRepository
     {
-        IDBProvider dbProvider { get; }
 
         List<Candle> GetRatesFromDb(uint instrumentId, DateTime dateStart, DateTime dateEnd);
+        DateTime? GetLastCandleDtForInstrumentFromDb(uint instrumentId);
     }
 }

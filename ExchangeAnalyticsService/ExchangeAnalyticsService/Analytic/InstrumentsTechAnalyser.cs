@@ -104,8 +104,8 @@ namespace ExchangeAnalyticsService.Analytic
         {
             var candleRequest = new CandlesRequest()
             {
-                DateStart = new DateTime(2018, 1, 1),
-                DateEnd = new DateTime(2021, 1, 1),
+                DateStart = DateTime.Now.AddMonths(-13),
+                DateEnd = DateTime.Now.AddDays(5),
                 InstrumentId = instrumentId,
                 Interval = interval
             };
@@ -114,7 +114,6 @@ namespace ExchangeAnalyticsService.Analytic
 
             if (!candles.Any())
                 return null;
-
 
 
             var mlRes = AnalyseMl(candles);

@@ -58,6 +58,17 @@ namespace ExchangeAnalyticsService
             services.AddSingleton<IParsersService, ParsersService>();
             services.AddSingleton<IParsersRepository, ParsersRepository>();
             services.AddSingleton<InstrumentsTechAnalyser, InstrumentsTechAnalyser>();
+            services.AddSingleton<IPortfolioService, PortfolioService>();
+            services.AddSingleton<IPortfolioRepository>(r =>
+            {
+                var log = r.GetService<ILogger<PortfolioRepository>>();
+                return new PortfolioRepository(log, DbUtils.UserPortfolioDb);
+            });
+            services.AddSingleton<IOperationsRepository>(r =>
+            {
+                var log = r.GetService<ILogger<OperationsRepository>>();
+                return new OperationsRepository(log, DbUtils.UserPortfolioDb);
+            });
             services.AddSingleton<ITechMethodsRepository>(r =>
             {
                 var log = r.GetService<ILogger<TechMethodsRepository>>();

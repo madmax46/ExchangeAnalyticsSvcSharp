@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExchCommonLib.CandlesUtils;
 
 namespace ExchangeAnalyticsService.Services
 {
@@ -35,9 +36,29 @@ namespace ExchangeAnalyticsService.Services
             var candlesFromDb = GetCandlesFromDb(candlesRequest.InstrumentId, candlesRequest.DateStart, candlesRequest.DateEnd);
             var candleInterval = GetCandlesIntervalFromStringValue(candlesRequest.Interval);
 
-            var convertedCandels = ConvertMinuteCandlesToInterval(candlesFromDb, candleInterval);
+            var convertedCandles = ConvertMinuteCandlesToInterval(candlesFromDb, candleInterval);
 
-            return new CandlesResponse() { Candles = convertedCandels };
+            return new CandlesResponse() { Candles = convertedCandles };
+        }
+
+        public CandlesResponse GetLastCandleForInstrument(LastCandleRequest lastCandleRequest)
+        {
+            var dt = ratesRepository.GetLastCandleDtForInstrumentFromDb(lastCandleRequest.InstrumentId);
+            if (!dt.HasValue)
+                return new CandlesResponse();
+
+            var dtStart = dt.Value.AddDays(-7);
+            var dtEnd = dt.Value.AddDays(7);
+
+            var candlesResponse = GetCandles(new CandlesRequest() { DateStart = dtStart, DateEnd = dtEnd, InstrumentId = lastCandleRequest.InstrumentId, Interval = lastCandleRequest.Interval });
+            if (!candlesResponse.Candles.Any())
+                return new CandlesResponse();
+
+            var last = candlesResponse.Candles.Last();
+            var lastList = new List<Candle>() { last };
+            candlesResponse.Candles = lastList;
+
+            return candlesResponse;
         }
 
         private (DateTime, DateTime) PrepareDate(DateTime dateStart, DateTime dateEnd)
@@ -81,9 +102,8 @@ namespace ExchangeAnalyticsService.Services
             if (candlesInterval == CandlesInterval.Min)
                 return minuteCandles;
 
-            return minuteCandles;
+
+            return CommonCandlesUtils.AggregateMinCandlesToInterval(minuteCandles, candlesInterval);
         }
-
-
     }
 }
