@@ -11,7 +11,7 @@ namespace ExchangeAnalyticsService.Services.Interfaces
 {
     public interface ICandlesService
     {
-        CandlesResponse GetCandles(CandlesRequest candlesRequest);
+        CandlesResponse GetCandles(CandlesRequest candlesRequest, bool isNeedLastCandleInfo = false);
         CandlesResponse GetLastCandleForInstrument(LastCandleRequest lastCandleRequest);
 
     }

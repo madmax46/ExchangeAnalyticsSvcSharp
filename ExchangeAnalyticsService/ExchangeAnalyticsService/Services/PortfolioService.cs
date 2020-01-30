@@ -8,6 +8,7 @@ using ExchCommonLib.Analytics;
 using ExchCommonLib.Classes.Operations;
 using ExchCommonLib.Classes.Requests;
 using ExchCommonLib.Classes.UserPortfolio;
+using ExchCommonLib.Enums;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeAnalyticsService.Services
@@ -79,6 +80,19 @@ namespace ExchangeAnalyticsService.Services
                         var analytics = new ConsolidateInstrumentsAnalysis(analysisResponse.Predictions);
                         onePosition.Analytics = analytics.Summary;
 
+                        if ((analytics.SummaryKey == 1 || analytics.SummaryKey == 2) && onePosition.RemCount < 0)
+                        {
+                            //if (onePosition.AvgPrice < onePosition.CurPrice)
+                            onePosition.Analytics = analytics.GetOppositeDecision();
+
+                        }
+
+                        if (analytics.SummaryKey == 4 && onePosition.CurСost > 0)
+                        {
+                            onePosition.Analytics = analytics.GetOppositeDecision();
+                        }
+
+
                         // TotalAmount
                     }
                     catch (Exception e)
@@ -103,7 +117,23 @@ namespace ExchangeAnalyticsService.Services
         {
             try
             {
-                return operationsRepository.GetUserOperationsHistory(userId);
+                var history = operationsRepository.GetUserOperationsHistory(userId);
+                var instrumentsResponse = instrumentsService.GetParsedInstruments();
+                var instDict = instrumentsResponse.Instruments.ToDictionary(r => (uint)r.FinamEmitentIDInt, r => r);
+
+                if (history?.Operations?.Any() != true)
+                    return history;
+
+                history.Operations.RemoveAll(r => !instDict.ContainsKey(r.InstrumentId));
+
+                foreach (var operation in history.Operations)
+                {
+                    var instrument = instDict[operation.InstrumentId];
+                    operation.InstrumentName = instrument.Name;
+                    operation.OperationTypeStr = operation.OrderType == OperationType.Buy ? "Покупка" : "Продажа";
+                }
+
+                return history;
             }
             catch (Exception e)
             {

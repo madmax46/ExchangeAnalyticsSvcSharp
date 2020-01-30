@@ -45,7 +45,7 @@ namespace ExchangeAnalyticsService
 
             services.AddLogging(logging =>
             {
-                logging.ClearProviders();
+                //logging.ClearProviders();
                 logging.SetMinimumLevel(LogLevel.Trace);
             });
 

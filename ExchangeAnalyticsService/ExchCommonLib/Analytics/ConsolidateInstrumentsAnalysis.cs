@@ -8,6 +8,7 @@ namespace ExchCommonLib.Analytics
     {
 
         public string Summary { get; private set; }
+        public int SummaryKey { get; private set; }
         public uint SellCnt { get; }
         public uint BuyCnt { get; }
         public uint NeutralCnt { get; }
@@ -24,7 +25,11 @@ namespace ExchCommonLib.Analytics
 
         public ConsolidateInstrumentsAnalysis(List<AnalyticalPredictionInfo> predictions)
         {
-
+            if (predictions?.Any() != true)
+            {
+                (Summary, SummaryKey) = GetConsolidateDecision(SellCnt, BuyCnt, NeutralCnt);
+                return;
+            }
 
             var sellCnt = predictions.Count(r => r.PredictionDecision == "Продавать" || r.PredictionDecision == "Sell");
             var buyCnt = predictions.Count(r => r.PredictionDecision == "Покупать" || r.PredictionDecision == "Buy");
@@ -34,7 +39,7 @@ namespace ExchCommonLib.Analytics
             BuyCnt = (uint)buyCnt;
             NeutralCnt = (uint)neutralCnt;
 
-            Summary = GetConsolidateDecision(SellCnt, BuyCnt, NeutralCnt);
+            (Summary, SummaryKey) = GetConsolidateDecision(SellCnt, BuyCnt, NeutralCnt);
         }
         public ConsolidateInstrumentsAnalysis(uint sellCnt, uint buyCnt, uint neutralCnt)
         {
@@ -42,9 +47,31 @@ namespace ExchCommonLib.Analytics
             BuyCnt = buyCnt;
             NeutralCnt = neutralCnt;
 
-            Summary = GetConsolidateDecision(SellCnt, BuyCnt, NeutralCnt);
+            (Summary, SummaryKey) = GetConsolidateDecision(SellCnt, BuyCnt, NeutralCnt);
         }
 
+        public string GetOppositeDecision()
+        {
+            var key = DecisionStr.FirstOrDefault(r => r.Value == Summary).Key;
+            var newOppositeKey = key;
+            switch (key)
+            {
+                case 1:
+                    newOppositeKey = 5;
+                    break;
+                case 5:
+                    newOppositeKey = 1;
+                    break;
+                case 2:
+                    newOppositeKey = 4;
+                    break;
+                case 4:
+                    newOppositeKey = 2;
+                    break;
+            }
+
+            return DecisionStr[newOppositeKey];
+        }
 
         //public static string GetConsolidateDecision(List<AnalyticalPredictionInfo> predictionInfos)
         //{
@@ -55,7 +82,7 @@ namespace ExchCommonLib.Analytics
         //}
 
 
-        public static string GetConsolidateDecision(uint sellCnt, uint buyCnt, uint neutralCnt)
+        public static (string, int) GetConsolidateDecision(uint sellCnt, uint buyCnt, uint neutralCnt)
         {
             var allClassesCnt = buyCnt + sellCnt + neutralCnt;
             var classSum = (int)buyCnt - sellCnt;
@@ -67,13 +94,13 @@ namespace ExchCommonLib.Analytics
             for (var i = 1; i <= 5; i++)
             {
                 if (classSum >= leftInterval && classSum <= rightInterval)
-                    return DecisionStr[i];
+                    return (DecisionStr[i], i);
 
                 leftInterval += intervalClass;
                 rightInterval += intervalClass;
             }
 
-            return DecisionStr[3];
+            return (DecisionStr[3], 3);
         }
 
 

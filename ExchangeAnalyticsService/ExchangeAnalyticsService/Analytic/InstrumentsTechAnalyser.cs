@@ -207,7 +207,7 @@ namespace ExchangeAnalyticsService.Analytic
                     var series = new SimpleSeries() { SeriesValues = values };
 
                     decision = MakeOscillatorsDecision(oneMovingAverage, series);
-                    lastValue = values.Last();
+                    lastValue = values.LastOrDefault();
                 }
                 catch (Exception e)
                 {

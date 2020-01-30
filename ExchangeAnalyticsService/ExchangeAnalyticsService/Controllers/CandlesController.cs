@@ -31,13 +31,30 @@ namespace ExchangeAnalyticsService.Controllers
 
         [HttpPost]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ActionResult<List<ParserInfo>>), 200)]
+        [ProducesResponseType(typeof(ActionResult<CandlesResponse>), 200)]
         [Route("api/v{version:apiVersion}/market/candles")]
         public ActionResult<CandlesResponse> GetRates([FromBody] CandlesRequest request)
         {
             try
             {
-                return new ActionResult<CandlesResponse>(ratesService.GetCandles(request));
+                return new ActionResult<CandlesResponse>(ratesService.GetCandles(request, true));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+
+        [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(ActionResult<CandlesResponse>), 200)]
+        [Route("api/v{version:apiVersion}/market/candles/last")]
+        public ActionResult<CandlesResponse> GetLastCandleForInstrument([FromBody] LastCandleRequest request)
+        {
+            try
+            {
+                return new ActionResult<CandlesResponse>(ratesService.GetLastCandleForInstrument(request));
             }
             catch (Exception ex)
             {

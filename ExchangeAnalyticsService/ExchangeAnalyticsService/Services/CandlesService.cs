@@ -23,7 +23,20 @@ namespace ExchangeAnalyticsService.Services
             this.ratesRepository = ratesRepository;
         }
 
-        public CandlesResponse GetCandles(CandlesRequest candlesRequest)
+        public CandlesResponse GetCandles(CandlesRequest candlesRequest, bool isNeedLastCandleInfo = false)
+        {
+            var candles = GetCandlesByRequest(candlesRequest);
+
+            if (isNeedLastCandleInfo)
+            {
+                var lastCandle = GetLastCandleForInstrument(new LastCandleRequest(candlesRequest.InstrumentId, "min"));
+                candles.LastCandle = lastCandle.LastCandle;
+            }
+
+            return candles;
+        }
+
+        private CandlesResponse GetCandlesByRequest(CandlesRequest candlesRequest)
         {
             if (candlesRequest == null || candlesRequest.InstrumentId == 0)
                 return new CandlesResponse();
@@ -38,6 +51,7 @@ namespace ExchangeAnalyticsService.Services
 
             var convertedCandles = ConvertMinuteCandlesToInterval(candlesFromDb, candleInterval);
 
+            //return new CandlesResponse() {Candles = convertedCandles, LastCandle = lastCandle.Candles.FirstOrDefault()};
             return new CandlesResponse() { Candles = convertedCandles };
         }
 
@@ -50,13 +64,14 @@ namespace ExchangeAnalyticsService.Services
             var dtStart = dt.Value.AddDays(-7);
             var dtEnd = dt.Value.AddDays(7);
 
-            var candlesResponse = GetCandles(new CandlesRequest() { DateStart = dtStart, DateEnd = dtEnd, InstrumentId = lastCandleRequest.InstrumentId, Interval = lastCandleRequest.Interval });
+            var candlesResponse = GetCandlesByRequest(new CandlesRequest() { DateStart = dtStart, DateEnd = dtEnd, InstrumentId = lastCandleRequest.InstrumentId, Interval = lastCandleRequest.Interval });
             if (!candlesResponse.Candles.Any())
                 return new CandlesResponse();
 
             var last = candlesResponse.Candles.Last();
             var lastList = new List<Candle>() { last };
             candlesResponse.Candles = lastList;
+            candlesResponse.LastCandle = last;
 
             return candlesResponse;
         }
