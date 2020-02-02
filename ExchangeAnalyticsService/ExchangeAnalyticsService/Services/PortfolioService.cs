@@ -80,20 +80,47 @@ namespace ExchangeAnalyticsService.Services
                         var analytics = new ConsolidateInstrumentsAnalysis(analysisResponse.Predictions);
                         onePosition.Analytics = analytics.Summary;
 
-                        if ((analytics.SummaryKey == 1 || analytics.SummaryKey == 2) && onePosition.RemCount < 0)
+
+
+                        switch (onePosition)
                         {
-                            //if (onePosition.AvgPrice < onePosition.CurPrice)
-                            onePosition.Analytics = analytics.GetOppositeDecision();
+                            case var item when item.RemCount > 0 && item.AvgPrice > item.CurPrice && (analytics.SummaryKey == 1 || analytics.SummaryKey == 2):
+                                {
+                                    onePosition.Analytics = "В следующие 30 минут ожидается понижение цены, поэтому можно продать сейчас и зафиксировать потери, либо позже купить еще актива по более низкой цене";
+                                    break;
+                                }
+                            case var item when item.RemCount < 0 && item.AvgPrice < item.CurPrice &&
+                                               (analytics.SummaryKey == 4 || analytics.SummaryKey == 5):
+                                {
+                                    onePosition.Analytics = "В следующие 30 минут ожидается повышение цены, поэтому лучше купить по текущей цене и зафиксировать потери";
+                                    break;
+                                }
+                            case var item when item.RemCount > 0 && item.AvgPrice < item.CurPrice &&
+                                               (analytics.SummaryKey == 4 || analytics.SummaryKey == 5):
+                                {
+                                    onePosition.Analytics = "В следующие 30 минут ожидается повышение цены, можно открыть позицию в лонг или продать сейчас и зафиксировать прибыль";
+                                    break;
+                                }
+                            case var item2 when item2.RemCount < 0 && item2.AvgPrice > item2.CurPrice &&
+                                                (analytics.SummaryKey == 1 || analytics.SummaryKey == 2):
+                                {
+                                    onePosition.Analytics = "В следующие 30 минут ожидается понижение цены, рекомендуется подождать еще понижения цены и выкупить актив";
+                                    break;
+                                }
 
+                            case var item when item.RemCount < 0 && item.AvgPrice < item.CurPrice && (analytics.SummaryKey == 1 || analytics.SummaryKey == 2):
+                                {
+                                    onePosition.Analytics = "В следующие 30 минут ожидается понижение цены, можно открыть позицию шорт, подождать понижения цены и выкупить актив";
+                                    break;
+                                }
+                            case var item3 when item3.RemCount < 0 && item3.AvgPrice > item3.CurPrice &&
+                                                (analytics.SummaryKey == 4 || analytics.SummaryKey == 5):
+                                {
+                                    onePosition.Analytics = "В следующие 30 минут ожидается повышение цены, можно открыть позицию в лонг или купить сейчас и зафиксировать потери";
+                                    break;
+
+                                }
                         }
-
-                        if (analytics.SummaryKey == 4 && onePosition.CurСost > 0)
-                        {
-                            onePosition.Analytics = analytics.GetOppositeDecision();
-                        }
-
-
-                        // TotalAmount
                     }
                     catch (Exception e)
                     {

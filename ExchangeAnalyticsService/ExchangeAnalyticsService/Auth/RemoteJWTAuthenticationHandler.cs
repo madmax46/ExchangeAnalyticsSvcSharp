@@ -67,6 +67,9 @@ namespace ExchangeAnalyticsService.Auth
 
             if (res.Response?.IsSuccess == true)
             {
+                claims.Add(new Claim("UserId", res.Response.User.UserId.ToString()));
+
+
                 if (!string.IsNullOrEmpty(res.Response.User.FirstName))
                     claims.Add(new Claim("FirstName", res.Response.User.FirstName));
 

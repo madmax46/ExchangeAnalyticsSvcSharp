@@ -128,18 +128,19 @@ namespace ExchangeAnalyticsService.Analytic
 
         private List<AnalyticalPredictionInfo> AnalyseTechIndicators(List<Candle> candles)
         {
-            var movingAvgPredictions = AnalyseMovingAverages(candles);
-            var oscillatorsPredictions = AnalyseOscillators(candles);
+            var closePrices = candles.Select(r => r.Close).ToList();
+            var highPrices = candles.Select(r => r.High).ToList();
+            var lowPrices = candles.Select(r => r.Low).ToList();
+
+            var movingAvgPredictions = AnalyseMovingAverages(closePrices, highPrices, lowPrices);
+            var oscillatorsPredictions = AnalyseOscillators(closePrices, highPrices, lowPrices);
 
             return movingAvgPredictions.Concat(oscillatorsPredictions).ToList();
         }
 
 
-        private List<AnalyticalPredictionInfo> AnalyseMovingAverages(List<Candle> candles)
+        private List<AnalyticalPredictionInfo> AnalyseMovingAverages(List<double> closePrices, List<double> highPrices, List<double> lowPrices)
         {
-            var closePrices = candles.Select(r => r.Close).ToList();
-            var highPrices = candles.Select(r => r.High).ToList();
-            var lowPrices = candles.Select(r => r.Low).ToList();
 
             var calculatedMovingAverages = new Dictionary<IIndicator<List<double?>>, SimpleSeries>();
             var movingAveragesDecision = new List<AnalyticalPredictionInfo>();
@@ -184,9 +185,8 @@ namespace ExchangeAnalyticsService.Analytic
         }
 
 
-        private List<AnalyticalPredictionInfo> AnalyseOscillators(List<Candle> candles)
+        private List<AnalyticalPredictionInfo> AnalyseOscillators(List<double> closePrices, List<double> highPrices, List<double> lowPrices)
         {
-            var closePrices = candles.Select(r => r.Close).ToList();
 
             //var calculatedMovingAverages = new Dictionary<IIndicator<List<double?>>, SimpleSeries>();
             var oscillatorsDecision = new List<AnalyticalPredictionInfo>();
@@ -219,6 +219,7 @@ namespace ExchangeAnalyticsService.Analytic
             }
 
             AnalyseMacd(closePrices, oscillatorsDecision);
+            AnalyseWpr(closePrices, highPrices, lowPrices, oscillatorsDecision);
             return oscillatorsDecision;
         }
 
@@ -257,6 +258,25 @@ namespace ExchangeAnalyticsService.Analytic
 
             oscillatorsDecision.Add(new AnalyticalPredictionInfo(macdIndicator.FullDescription,
                 macdRes?.MacdLine?.LastOrDefault(), macdDecision.ToString(), (uint)macdIndicator.TechMethodType));
+        }
+
+        private void AnalyseWpr(List<double> closePrices, List<double> highPrices, List<double> lowPrices, List<AnalyticalPredictionInfo> oscillatorsDecision)
+        {
+            var series = new SimpleSeries();
+            var wprDecision = AnalysisDecision.Unknown;
+            try
+            {
+                var val = wprIndicator.Calculate(closePrices, highPrices, lowPrices);
+                series.SeriesValues = val;
+                wprDecision = WprDecisionAnalyser.MakeDecision(series);
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            oscillatorsDecision.Add(new AnalyticalPredictionInfo(wprIndicator.FullDescription,
+                series?.SeriesValues?.LastOrDefault(), wprDecision.ToString(), (uint)wprIndicator.TechMethodType));
         }
 
 

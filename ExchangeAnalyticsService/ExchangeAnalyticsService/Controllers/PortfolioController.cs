@@ -37,8 +37,8 @@ namespace ExchangeAnalyticsService.Controllers
         [ProducesResponseType(typeof(ActionResult<Portfolio>), 200)]
         public Portfolio GetPortfolio()
         {
-            var claims = User.Claims;
-            return portfolioService.LoadUserPortfolio(1);
+            var userIdConv = GetUserId();
+            return portfolioService.LoadUserPortfolio(userIdConv);
         }
 
 
@@ -49,10 +49,17 @@ namespace ExchangeAnalyticsService.Controllers
         [ProducesResponseType(typeof(ActionResult<bool>), 200)]
         public ActionResult<bool> SaveOperation([FromBody] MarketOperation marketOperation)
         {
-            var claims = User.Claims;
-            var res = portfolioService.SaveUserOperationToDb(1, marketOperation);
+            var userIdConv = GetUserId();
+            var res = portfolioService.SaveUserOperationToDb(userIdConv, marketOperation);
             //return portfolioService.LoadUserPortfolio(1);
             return res;
+        }
+
+        private uint GetUserId()
+        {
+            var userId = User.Claims.FirstOrDefault(r => r.Type == "UserId");
+            var userIdConv = userId != null ? Convert.ToUInt32(userId.Value) : 0;
+            return userIdConv;
         }
 
         [HttpGet]
@@ -62,8 +69,8 @@ namespace ExchangeAnalyticsService.Controllers
         [ProducesResponseType(typeof(ActionResult<OperationsHistory>), 200)]
         public ActionResult<OperationsHistory> LoadHistoryOperation()
         {
-            var claims = User.Claims;
-            var res = portfolioService.GetUserOperationsHistory(1);
+            var userIdConv = GetUserId();
+            var res = portfolioService.GetUserOperationsHistory(userIdConv);
             return res;
         }
 
@@ -75,8 +82,8 @@ namespace ExchangeAnalyticsService.Controllers
         [ProducesResponseType(typeof(ActionResult<bool>), 200)]
         public ActionResult<bool> RemoveOperation(uint operationId)
         {
-            var claims = User.Claims;
-            var res = portfolioService.DeleteUserOperation(1, operationId);
+            var userIdConv = GetUserId();
+            var res = portfolioService.DeleteUserOperation(userIdConv, operationId);
             return res;
         }
     }
