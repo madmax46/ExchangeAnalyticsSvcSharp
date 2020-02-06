@@ -61,5 +61,23 @@ namespace ExchangeAnalyticsService.Controllers
                 return StatusCode(500, ex);
             }
         }
+
+
+        [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(ActionResult<CandlesResponse>), 200)]
+        [Route("api/v{version:apiVersion}/market/candles/aggregate")]
+        public ActionResult AggregateAllCandles([FromBody] CandlesRequest request)
+        {
+            try
+            {
+                ratesService.SaveAggCandlesToDb(request);
+                return StatusCode(200);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
     }
 }

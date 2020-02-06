@@ -12,6 +12,7 @@ namespace ExchangeAnalyticsService.Services.Interfaces
     public interface ICandlesService
     {
         CandlesResponse GetCandles(CandlesRequest candlesRequest, bool isNeedLastCandleInfo = false);
+        void SaveAggCandlesToDb(CandlesRequest candlesRequest);
         CandlesResponse GetLastCandleForInstrument(LastCandleRequest lastCandleRequest);
 
     }

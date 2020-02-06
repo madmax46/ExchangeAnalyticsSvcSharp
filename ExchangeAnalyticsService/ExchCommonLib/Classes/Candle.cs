@@ -25,7 +25,7 @@ namespace ExchCommonLib.Classes
             candle.Low = Math.Round(Convert.ToDouble(oneRow["low"]), 2);
             candle.Close = Math.Round(Convert.ToDouble(oneRow["close"]), 2);
             candle.Volume = Convert.ToUInt64(oneRow["volume"]);
-            candle.Interval = CandlesInterval.Min;
+            candle.Interval = (CandlesInterval)Convert.ToUInt32(oneRow["intervalAgg"]);
             return candle;
         }
     }

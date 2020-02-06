@@ -46,13 +46,14 @@ namespace ExchangeAnalyticsService.Services
 
             (candlesRequest.DateStart, candlesRequest.DateEnd) = PrepareDate(candlesRequest.DateStart, candlesRequest.DateEnd);
 
-            var candlesFromDb = GetCandlesFromDb(candlesRequest.InstrumentId, candlesRequest.DateStart, candlesRequest.DateEnd);
             var candleInterval = GetCandlesIntervalFromStringValue(candlesRequest.Interval);
+            var candlesFromDb = GetCandlesFromDb(candlesRequest.InstrumentId, candleInterval, candlesRequest.DateStart, candlesRequest.DateEnd);
 
-            var convertedCandles = ConvertMinuteCandlesToInterval(candlesFromDb, candleInterval);
+            //var convertedCandles = ConvertMinuteCandlesToInterval(candlesFromDb, candleInterval);
 
             //return new CandlesResponse() {Candles = convertedCandles, LastCandle = lastCandle.Candles.FirstOrDefault()};
-            return new CandlesResponse() { Candles = convertedCandles };
+            //return new CandlesResponse() { Candles = convertedCandles };
+            return new CandlesResponse() { Candles = candlesFromDb };
         }
 
         public CandlesResponse GetLastCandleForInstrument(LastCandleRequest lastCandleRequest)
@@ -89,9 +90,9 @@ namespace ExchangeAnalyticsService.Services
             return (dateStart, dateEnd);
         }
 
-        private List<Candle> GetCandlesFromDb(uint instrumentId, DateTime dateStart, DateTime dateEnd)
+        private List<Candle> GetCandlesFromDb(uint instrumentId, CandlesInterval interval, DateTime dateStart, DateTime dateEnd)
         {
-            return ratesRepository.GetRatesFromDb(instrumentId, dateStart, dateEnd);
+            return ratesRepository.GetRatesFromDb(instrumentId, interval, dateStart, dateEnd);
         }
 
 
@@ -119,6 +120,26 @@ namespace ExchangeAnalyticsService.Services
 
 
             return CommonCandlesUtils.AggregateMinCandlesToInterval(minuteCandles, candlesInterval);
+        }
+
+        public void SaveAggCandlesToDb(CandlesRequest candlesRequest)
+        {
+            candlesRequest.Interval = "1min";
+            var minCandles = GetCandlesByRequest(candlesRequest);
+            var enumArr = Enum.GetValues(typeof(CandlesInterval));
+
+            foreach (var oneInterval in enumArr)
+            {
+                var intVal = Convert.ToUInt32(oneInterval);
+                var enumVal = (CandlesInterval)oneInterval;
+                if (enumVal == CandlesInterval.Min)
+                    continue;
+
+                var convertedCandles = ConvertMinuteCandlesToInterval(minCandles.Candles, enumVal);
+
+                ratesRepository.SaveCandlesToDb(candlesRequest.InstrumentId, convertedCandles);
+            }
+
         }
     }
 }

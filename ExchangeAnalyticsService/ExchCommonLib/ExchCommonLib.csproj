@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\CommonProjects\CommonProjects\DbWrapperCore\DbWrapperCore.csproj" />
+    <ProjectReference Include="..\..\..\CommonProjects\CommonProjects\TechAnalysisAlgLib\TechAnalysisAlgLib.csproj" />
   </ItemGroup>
 
 </Project>

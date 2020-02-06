@@ -27,10 +27,10 @@ namespace ExchangeAnalyticsService.Utils
                         {
                             MySqlConfig config = new MySqlConfig()
                             {
-                                Host = "localhost",
-                                Port = 3307,
+                                Host = "89.208.196.51",
+                                Port = 3306,
                                 UserId = "root",
-                                Password = "secret",
+                                Password = "admin1234",
                                 SslMode = "none",
                                 Database = "stockquotes",
                                 CharacterSet = "utf8"
@@ -43,6 +43,36 @@ namespace ExchangeAnalyticsService.Utils
                 return mariaDbWrapper;
             }
         }
+
+        
+        //public static MySqlWrap MariaDbWrapper
+        //{
+        //    get
+        //    {
+        //        if (mariaDbWrapper == null)
+        //        {
+        //            lock (syncRoot)
+        //            {
+        //                if (mariaDbWrapper == null)
+        //                {
+        //                    MySqlConfig config = new MySqlConfig()
+        //                    {
+        //                        Host = "localhost",
+        //                        Port = 3307,
+        //                        UserId = "root",
+        //                        Password = "secret",
+        //                        SslMode = "none",
+        //                        Database = "stockquotes",
+        //                        CharacterSet = "utf8"
+        //                    };
+        //                    mariaDbWrapper = new MySqlWrap(config);
+        //                }
+        //            }
+        //        }
+
+        //        return mariaDbWrapper;
+        //    }
+        //}
 
 
 

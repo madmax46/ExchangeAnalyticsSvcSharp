@@ -13,6 +13,7 @@ using TechAnalysisAlgLib.Enums;
 using TechAnalysisAlgLib.Indicators.MovingAverage;
 using TechAnalysisAlgLib.Indicators.Oscillators;
 using TechAnalysisAlgLib.Interfaces;
+using TechAnalysisAlgLib.Ml;
 using TechAnalysisAlgLib.Series;
 
 namespace ExchangeAnalyticsService.Analytic
@@ -102,9 +103,20 @@ namespace ExchangeAnalyticsService.Analytic
 
         public List<AnalyticalPredictionInfo> AnalyseInstrument(uint instrumentId, string interval)
         {
+
+            var dateStart = DateTime.Now.AddDays(-5);
+            if (interval == "day")
+                dateStart = DateTime.Now.AddDays(-50);
+
+            if (interval == "week")
+                dateStart = DateTime.Now.AddDays(-400);
+
+            if (interval == "month")
+                dateStart = DateTime.Now.AddMonths(-50);
+
             var candleRequest = new CandlesRequest()
             {
-                DateStart = DateTime.Now.AddMonths(-13),
+                DateStart = dateStart,
                 DateEnd = DateTime.Now.AddDays(5),
                 InstrumentId = instrumentId,
                 Interval = interval
@@ -117,13 +129,39 @@ namespace ExchangeAnalyticsService.Analytic
 
 
             var mlRes = AnalyseMl(candles);
-            return AnalyseTechIndicators(candles);
+            var indicators = AnalyseTechIndicators(candles);
+
+            return mlRes.Concat(indicators).ToList();
         }
 
         private List<AnalyticalPredictionInfo> AnalyseMl(List<Candle> candles)
         {
 
-            return new List<AnalyticalPredictionInfo>();
+            var subList = candles.TakeLast(50).ToList();
+            var closePrice = subList.Select(r => r.High).ToList();
+            var x = new List<double>();
+            for (double i = 1; i <= subList.Count; i += 1)
+            {
+                x.Add(i);
+            }
+
+            InterpolateMnk mnk = new InterpolateMnk(x, closePrice);
+            mnk.Mnk(subList.Count - 1);
+            var value = mnk.Interpolate(subList.Count + 0.001);
+
+            var lastCandle = candles.Last();
+            if (!double.IsNormal(value))
+            {
+                value = lastCandle.Close;
+            }
+            else
+            {
+                value = Math.Round(value, 2);
+            }
+
+            var decision = MlDecisionAnalyser.MakeDecision(value, lastCandle.Close);
+            var info = new AnalyticalPredictionInfo("Искусственная нейронная сеть LSTM", value, decision.ToString(), (uint)TechMethodType.MlMethod);
+            return new List<AnalyticalPredictionInfo>() { info };
         }
 
         private List<AnalyticalPredictionInfo> AnalyseTechIndicators(List<Candle> candles)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TechAnalysisAlgLib.Interfaces;
 
 namespace ExchCommonLib.Classes.Responses
 {
@@ -10,9 +11,20 @@ namespace ExchCommonLib.Classes.Responses
         public Candle LastCandle { get; set; }
 
 
+        public List<IndicatorResponse> IndicatorResponses { get; set; }
+
+
         public CandlesResponse()
         {
             Candles = new List<Candle>();
         }
     }
+
+    public class IndicatorResponse
+    {
+        public string IndicatorName { get; set; }
+
+        public ISeries SeriesData { get; set; }
+    }
+
 }

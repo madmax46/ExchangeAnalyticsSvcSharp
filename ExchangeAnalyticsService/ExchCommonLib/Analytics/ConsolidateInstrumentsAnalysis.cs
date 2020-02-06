@@ -13,6 +13,7 @@ namespace ExchCommonLib.Analytics
         public uint BuyCnt { get; }
         public uint NeutralCnt { get; }
 
+        public string MlSummary { get; private set; }
 
         public static Dictionary<int, string> DecisionStr = new Dictionary<int, string>()
         {
@@ -73,6 +74,12 @@ namespace ExchCommonLib.Analytics
             return DecisionStr[newOppositeKey];
         }
 
+
+        public void SetMlSummary(string mlSummary)
+        {
+            MlSummary = mlSummary;
+
+        }
         //public static string GetConsolidateDecision(List<AnalyticalPredictionInfo> predictionInfos)
         //{
         //    if (!predictionInfos.Any())

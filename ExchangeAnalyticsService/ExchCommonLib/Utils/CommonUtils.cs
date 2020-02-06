@@ -3,6 +3,7 @@ using ExchCommonLib.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace ExchCommonLib.Utils
@@ -37,6 +38,16 @@ namespace ExchCommonLib.Utils
             }
         }
 
+        public static List<List<T>> ChunkBy<T>(this List<T> input, int batchSize)
+        {
+            var retVal = input
+                .Select((x, i) => new { Index = i, Value = x })
+                .GroupBy(x => x.Index / batchSize)
+                .Select(x => x.Select(v => v.Value).ToList())
+                .ToList();
+
+            return retVal;
+        }
 
     }
 }
