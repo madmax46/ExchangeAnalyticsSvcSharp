@@ -12,4 +12,5 @@ namespace ExchCommonLib.Rest
 
         public T Response { get; set; }
     }
+
 }
